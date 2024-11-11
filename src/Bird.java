@@ -9,7 +9,7 @@ public class Bird extends JLabel {
     private final int x;
     private int y;
     private double gravity;
-    private double velocity = 0;
+    private double velocity = -10;
 
     // Image birdImage = new ImageIcon("bird.png").getImage();
     public Bird(Image img, int x, int y, int width, int height) {
