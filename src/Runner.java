@@ -8,7 +8,7 @@ public class Runner implements KeyListener {
         frame.setSize(360, 640);
         frame.setResizable(false);
         frame.setLocationRelativeTo(null);
-        frame.addKeyListener(new Runner());
+        frame.addKeyListener(new Runner()); 
 
         Menu menu = new Menu();
         frame.add(menu);

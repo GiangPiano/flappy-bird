@@ -30,16 +30,16 @@ public class Game extends JPanel implements ActionListener, KeyListener {
     private final Image pipeBottomImage = new ImageIcon("../assets/spikebottom.png").getImage();
     private ArrayList<Pipe> topPipes;
     private ArrayList<Pipe> bottomPipes;
-    private final int PIPE_TIME = 1500;
-    private final int PIPE_GAP = 200;
-    private boolean isGameOver = false;
+    private int PIPE_TIME = 1500;
+    private int PIPE_GAP = 200;
+    private double PIPE_SPEED = 3;
     private int point = 0;
     Timer pipeLoop;
-
     // PHYSICS
+    private boolean isGameOver = false;
     private final int JUMP_FORCE = -10;
     private final double GRAVITY = 0.5;
-    private final int PIPE_SPEED = 3;
+    Timer difficultyLoop;
 
     public Game() {
         setFocusable(true);
@@ -51,7 +51,7 @@ public class Game extends JPanel implements ActionListener, KeyListener {
         
         topPipes = new ArrayList<>();
         bottomPipes = new ArrayList<>();
-        Pipe.speed = PIPE_SPEED;
+        Pipe.speed = (int) PIPE_SPEED;
 
         pipeLoop = new Timer(PIPE_TIME, new ActionListener() {
             @Override
@@ -63,6 +63,23 @@ public class Game extends JPanel implements ActionListener, KeyListener {
 
         gameLoop = new Timer(1000/FPS, this);
         gameLoop.start();
+
+        difficultyLoop = new Timer(1000, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (PIPE_SPEED < 6) {
+                    PIPE_SPEED += 0.05;
+                    Pipe.speed = (int) PIPE_SPEED;
+                }
+                if (PIPE_TIME > 500){
+                    PIPE_TIME -= 10;
+                    pipeLoop.setDelay(PIPE_TIME);
+                }
+                if (PIPE_GAP > 80)
+                    PIPE_GAP -= 5;
+            }
+        });
+        difficultyLoop.start();
     }
     
     private void initializeKeyListener() {
@@ -135,6 +152,7 @@ public class Game extends JPanel implements ActionListener, KeyListener {
         if (isGameOver) {
             gameLoop.stop();
             pipeLoop.stop();
+            difficultyLoop.stop();
         }
     }
 

@@ -24,6 +24,7 @@ public class Bird extends JLabel {
         velocity = Math.min(velocity, 20);
         y += (int) velocity;
         y = Math.min(y, Game.GAME_HEIGHT - height);
+        y = Math.max(y, -100);
     }
     // public void setVelocity(double velocity) {
     //     this.velocity = velocity;
