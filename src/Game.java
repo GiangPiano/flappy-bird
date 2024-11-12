@@ -20,7 +20,7 @@ public class Game extends JPanel implements ActionListener, KeyListener {
     public static final int GAME_WIDTH = 360;
     public static final int GAME_HEIGHT = 640;
     // FPS
-    private final int FPS = 90;
+    private final int FPS = 120;
     Timer gameLoop;
     // BIRD
     private final Image birdImage = new ImageIcon("../assets/bird.png").getImage();
@@ -28,22 +28,24 @@ public class Game extends JPanel implements ActionListener, KeyListener {
     // PIPE
     private final Image pipeTopImage = new ImageIcon("../assets/spiketop.png").getImage();
     private final Image pipeBottomImage = new ImageIcon("../assets/spikebottom.png").getImage();
-    private ArrayList<Pipe> topPipes;
-    private ArrayList<Pipe> bottomPipes;
+    private final ArrayList<Pipe> topPipes;
+    private final ArrayList<Pipe> bottomPipes;
     private int PIPE_TIME = 1500;
     private int PIPE_GAP = 200;
     private double PIPE_SPEED = 3;
-    private int point = 0;
     Timer pipeLoop;
     // PHYSICS
-    private boolean isGameOver = false;
     private final int JUMP_FORCE = -10;
     private final double GRAVITY = 0.5;
+    // GAME
+    private int point = 0;
+    private boolean isGameOver = false;
+    private final int DIFFICULTY_INTERVAL = 2000;
     Timer difficultyLoop;
-
+    
     public Game() {
-        setFocusable(true);
         setPreferredSize(new Dimension(GAME_WIDTH, GAME_HEIGHT)); 
+        setFocusable(true);
         initializeKeyListener();
         
         bird = new Bird(birdImage, GAME_WIDTH / 8, GAME_HEIGHT / 2, 40, 28);
@@ -51,81 +53,56 @@ public class Game extends JPanel implements ActionListener, KeyListener {
         
         topPipes = new ArrayList<>();
         bottomPipes = new ArrayList<>();
-        Pipe.speed = (int) PIPE_SPEED;
-
-        pipeLoop = new Timer(PIPE_TIME, new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                placePipe();
-            }
+        Pipe.speed = PIPE_SPEED;
+        pipeLoop = new Timer(PIPE_TIME, (ActionEvent e) -> {
+            placePipe();
         });
         pipeLoop.start();
+        
+        
+        difficultyLoop = new Timer(DIFFICULTY_INTERVAL, (ActionEvent e) -> {
+            increaseDifficulty();
+        });
+        difficultyLoop.start();
 
         gameLoop = new Timer(1000/FPS, this);
         gameLoop.start();
-
-        difficultyLoop = new Timer(1000, new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (PIPE_SPEED < 6) {
-                    PIPE_SPEED += 0.05;
-                    Pipe.speed = (int) PIPE_SPEED;
-                }
-                if (PIPE_TIME > 500){
-                    PIPE_TIME -= 10;
-                    pipeLoop.setDelay(PIPE_TIME);
-                }
-                if (PIPE_GAP > 80)
-                    PIPE_GAP -= 5;
-            }
-        });
-        difficultyLoop.start();
     }
     
     private void initializeKeyListener() {
         addKeyListener(this);
     }
 
-    @Override
-    public void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        draw(g);
+    
+    public void increaseDifficulty() {
+        if (PIPE_SPEED < 6) {
+            PIPE_SPEED += 0.1;
+            Pipe.speed = PIPE_SPEED;
+        }
+        if (PIPE_TIME > 500){
+            PIPE_TIME -= 10;
+            pipeLoop.setDelay(PIPE_TIME);
+        }
+        if (PIPE_GAP > 80)
+        PIPE_GAP -= 5;
     }
-
+    
     public void placePipe() {
         Random random = new Random();
-        int pipeY = random.nextInt(GAME_HEIGHT * 1/4, GAME_HEIGHT *3/4);
+        int pipeY = random.nextInt(GAME_HEIGHT * 1/5, GAME_HEIGHT * 4/5);
         Pipe pipeTop = new Pipe(pipeTopImage, GAME_WIDTH, -pipeY, 64, 512);
         Pipe pipeBottom = new Pipe(pipeBottomImage, GAME_WIDTH, -pipeY + 512 + PIPE_GAP, 64, 512);
         topPipes.add(pipeTop);
         bottomPipes.add(pipeBottom);
     }
-
-    public void draw(Graphics g) {
-        g.drawImage(backgroundImage, 0, 0, GAME_WIDTH, GAME_HEIGHT, null);
-        g.drawImage(bird.getImage(), bird.getx(), bird.gety(), bird.getwidth(), bird.getheight(), null);
-        for (Pipe pipe : topPipes)
-            g.drawImage(pipe.getImage(), pipe.getx(), pipe.gety(), pipe.getwidth(), pipe.getheight(), null);
-        for (Pipe pipe : bottomPipes)
-            g.drawImage(pipe.getImage(), pipe.getx(), pipe.gety(), pipe.getwidth(), pipe.getheight(), null);
-        
-        g.setColor(Color.WHITE);
-        g.setFont(new Font("SF Pixelate", Font.BOLD, 20));
-        if (isGameOver){
-            g.drawString("Game over: " + point, 10, 20);
-            g.drawString("Press R to restart", 10, 40);
-        }
-        else
-            g.drawString("Score: " + point, 10, 20);
-    }
-
+    
     public boolean collision(Bird bird, Pipe pipe) {
         return bird.getx() < pipe.getx() + pipe.getwidth()/2&&
         bird.getx() + bird.getwidth() > pipe.getx() + pipe.getwidth()/2 &&
         bird.gety() < pipe.gety() + pipe.getheight() &&
         bird.gety() + bird.getheight() > pipe.gety();
     }
-
+    
     public void update() {
         bird.fall();
         for (Pipe pipe: topPipes){
@@ -155,7 +132,7 @@ public class Game extends JPanel implements ActionListener, KeyListener {
             difficultyLoop.stop();
         }
     }
-
+    
     @Override
     public void actionPerformed(ActionEvent e) {
         update();
@@ -177,4 +154,27 @@ public class Game extends JPanel implements ActionListener, KeyListener {
     }   
     @Override
     public void keyReleased(KeyEvent e) {}
+    
+    @Override
+    public void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        draw(g);
+    }
+    public void draw(Graphics g) {
+        g.drawImage(backgroundImage, 0, 0, GAME_WIDTH, GAME_HEIGHT, null);
+        g.drawImage(bird.getImage(), bird.getx(), bird.gety(), bird.getwidth(), bird.getheight(), null);
+        for (Pipe pipe : topPipes)
+            g.drawImage(pipe.getImage(), pipe.getx(), pipe.gety(), pipe.getwidth(), pipe.getheight(), null);
+        for (Pipe pipe : bottomPipes)
+            g.drawImage(pipe.getImage(), pipe.getx(), pipe.gety(), pipe.getwidth(), pipe.getheight(), null);
+        
+        g.setColor(Color.WHITE);
+        g.setFont(new Font("SF Pixelate", Font.BOLD, 20));
+        if (isGameOver){
+            g.drawString("Game over: " + point, 10, 20);
+            g.drawString("Press R to restart", 10, 40);
+        }
+        else
+        g.drawString("Score: " + point, 10, 20);
+    }
 }

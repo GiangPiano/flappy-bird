@@ -16,6 +16,7 @@ public class Runner implements KeyListener {
         frame.setVisible(true);
         
     }
+
     public static void start() {
         Game game = new Game();
         frame.add(game);
@@ -23,13 +24,14 @@ public class Runner implements KeyListener {
         game.requestFocus();
         frame.repaint();
     }
+
     public static void gameOver() {
         frame.remove(frame.getContentPane());
-        frame.repaint();
         Menu menu = new Menu();
         frame.add(menu);
         frame.pack();
         frame.requestFocus();
+        frame.repaint();
     }
 
     @Override

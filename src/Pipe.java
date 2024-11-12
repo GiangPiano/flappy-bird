@@ -7,8 +7,8 @@ public class Pipe extends JPanel{
     private final int pipeHeight;
     private final Image img;
     private int pipex;
-    private int pipey;
-    public static int speed;
+    private final int pipey;
+    public static double speed;
     private boolean passed;
 
     public Pipe(Image img, int pipex, int pipey, int pipeWidth, int pipeHeight) {
@@ -19,9 +19,6 @@ public class Pipe extends JPanel{
         this.pipeHeight = pipeHeight;
         this.passed = false;
     }
-    // public static void setSpeed(int speed) {
-    //     speed = speed;
-    // }
     public void move() {
         this.pipex -= speed;
     }
