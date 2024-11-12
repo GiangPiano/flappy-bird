@@ -16,18 +16,22 @@ import javax.swing.Timer;
 
 public class Game extends JPanel implements ActionListener, KeyListener {
     // BACKGROUND
-    private final Image backgroundImage = new ImageIcon("../assets/background.jpg").getImage();
+    // private final Image backgroundImage = new ImageIcon("../assets/background.jpg").getImage();
+    private final Image backgroundImage = new ImageIcon(getClass().getResource("assets/background.jpg")).getImage();
     public static final int GAME_WIDTH = 360;
     public static final int GAME_HEIGHT = 640;
     // FPS
-    private final int FPS = 120;
+    private final int FPS = 90;
     Timer gameLoop;
     // BIRD
-    private final Image birdImage = new ImageIcon("../assets/bird.png").getImage();
+    // private final Image birdImage = new ImageIcon("../assets/giang.jpg").getImage();
+    private final Image birdImage = new ImageIcon(getClass().getResource("assets/bird.png")).getImage();
     private final Bird bird;
     // PIPE
-    private final Image pipeTopImage = new ImageIcon("../assets/spiketop.png").getImage();
-    private final Image pipeBottomImage = new ImageIcon("../assets/spikebottom.png").getImage();
+    // private final Image pipeTopImage = new ImageIcon("../assets/spiketop.png").getImage();
+    // private final Image pipeBottomImage = new ImageIcon("../assets/spikebottom.png").getImage();
+    private final Image pipeTopImage = new ImageIcon(getClass().getResource("assets/spiketop.png")).getImage();
+    private final Image pipeBottomImage = new ImageIcon(getClass().getResource("assets/spikebottom.png")).getImage();
     private final ArrayList<Pipe> topPipes;
     private final ArrayList<Pipe> bottomPipes;
     private int PIPE_TIME = 1500;

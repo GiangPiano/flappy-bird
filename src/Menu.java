@@ -11,7 +11,8 @@ public class Menu extends JPanel{
     Image backgroundImage;
     public Menu() {
         setPreferredSize(new Dimension(width, height));
-        backgroundImage = new ImageIcon("../assets/menu2.jpg").getImage();
+        // backgroundImage = new ImageIcon("../assets/menu2.jpg").getImage();
+        backgroundImage = new ImageIcon(getClass().getResource("assets/menu2.jpg")).getImage();
     }
     @Override
     public void paintComponent(Graphics g) {
