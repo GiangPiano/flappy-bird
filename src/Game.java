@@ -34,7 +34,7 @@ public class Game extends JPanel implements ActionListener, KeyListener {
     private final Image pipeBottomImage = new ImageIcon(getClass().getResource("assets/spikebottom.png")).getImage();
     private final ArrayList<Pipe> topPipes;
     private final ArrayList<Pipe> bottomPipes;
-    private int PIPE_TIME = 1500;
+    private int PIPE_TIME = 1500; // milliseconds
     private int PIPE_GAP = 200;
     private double PIPE_SPEED = 3;
     Timer pipeLoop;
@@ -44,7 +44,7 @@ public class Game extends JPanel implements ActionListener, KeyListener {
     // GAME
     private int point = 0;
     private boolean isGameOver = false;
-    private final int DIFFICULTY_INTERVAL = 2000;
+    private final int DIFFICULTY_INTERVAL = 2000; // time to increase difficulty
     Timer difficultyLoop;
     
     public Game() {
