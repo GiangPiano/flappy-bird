@@ -2,7 +2,7 @@
 by Truong Giang Nguyen
 
 ## Before playing
-Install JDK
+Install JDK: https://download.oracle.com/java/23/latest/jdk-23_windows-x64_bin.exe (Windows)
 
 ## Playing the game
 If you only want to play the game (without customization), download this file:
@@ -10,5 +10,5 @@ If you only want to play the game (without customization), download this file:
 - FlappyGiang.jar: The bird is my face
 
 ## Customization
+Clone this repo
 You can customize the game by modifying variables in Game.java
-- PIPE_SPEED: 
